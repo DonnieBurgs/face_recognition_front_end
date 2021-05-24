@@ -16,3 +16,18 @@ export function getClassRecordList(params) {
   })
 }
 
+export function getStudentList(params) {
+  return request({
+    url: '/student/list',
+    method: 'get',
+    params
+  })
+}
+
+export function getStudentRecordList(params) {
+  return request({
+    url: '/record/list',
+    method: 'get',
+    params
+  })
+}

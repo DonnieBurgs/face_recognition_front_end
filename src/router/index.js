@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
@@ -60,19 +60,47 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/record/classRecord',
     name: 'Record',
-    meta: { title: 'Record', icon: 'el-icon-s-help' },
+    meta: { title: '考勤管理', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'classRecord',
         name: 'classRecord',
         component: () => import('@/views/record/classRecord/index'),
-        meta: { title: 'classRecord', icon: 'table' }
+        meta: { title: '课程考勤管理', icon: 'table' }
       },
       {
         path: 'studentRecord',
         name: 'studentRecord',
         component: () => import('@/views/record/studentRecord/index'),
-        meta: { title: 'studentRecord', icon: 'tree' }
+        meta: { title: '学生考勤管理', icon: 'tree' }
+      }
+    ]
+  },
+  {
+    path: '/student',
+    component: Layout,
+    redirect: '/studentManage',
+    name: 'Student',
+    children: [
+      {
+        path: '/studentManage',
+        name: 'studentManage',
+        component: () => import('@/views/student/index'),
+        meta: { title: '学生管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/teacher',
+    component: Layout,
+    redirect: '/teacherManage',
+    name: 'Teacher',
+    children: [
+      {
+        path: '/teacherManage',
+        name: 'teacherManage',
+        component: () => import('@/views/teacher/index'),
+        meta: { title: '教师管理', icon: 'el-icon-user-solid' }
       }
     ]
   },

@@ -14,11 +14,6 @@
             {{ scope.$index }}
           </template>
         </el-table-column>
-  <!--      <el-table-column label="Title">-->
-  <!--        <template slot-scope="scope">-->
-  <!--          {{ scope.row.title }}-->
-  <!--        </template>-->
-  <!--      </el-table-column>-->
         <el-table-column label="课程号" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
@@ -56,17 +51,6 @@
               @click="fetchClassRecordList(scope.row.id)">考勤信息</el-button>
           </template>
         </el-table-column>
-  <!--      <el-table-column class-name="status-col" label="Status" width="110" align="center">-->
-  <!--        <template slot-scope="scope">-->
-  <!--          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>-->
-  <!--        </template>-->
-  <!--      </el-table-column>-->
-  <!--      <el-table-column align="center" prop="created_at" label="Display_time" width="200">-->
-  <!--        <template slot-scope="scope">-->
-  <!--          <i class="el-icon-time" />-->
-  <!--          <span>{{ scope.row.display_time }}</span>-->
-  <!--        </template>-->
-  <!--      </el-table-column>-->
       </el-table>
       <el-pagination
         background
@@ -78,13 +62,8 @@
       </el-pagination>
     </div>
     <div v-if="dialogTableVisible">
-<!--      <el-table :data="classRecordList">-->
-<!--        <el-table-column property="id" label="记录编号" align="center"></el-table-column>-->
-<!--        <el-table-column property="studentId" label="学生编号" align="center"></el-table-column>-->
-<!--        <el-table-column property="courseId" label="课程编号" align="center"></el-table-column>-->
-<!--        <el-table-column property="time" label="打卡时间" align="center"></el-table-column>-->
-<!--      </el-table>-->
       <el-table
+        id = "out-table"
         v-loading="listLoading"
         :data="classRecordList"
         element-loading-text="Loading"
@@ -119,10 +98,18 @@
         <el-table-column
           align="center"
           label="学生编号"
-          sortable
           >
           <template slot-scope="scope">
             {{ scope.row.studentId }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="学生姓名"
+          width="100"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.student.name }}
           </template>
         </el-table-column>
         <el-table-column
@@ -136,38 +123,18 @@
       <div style="margin: 40px;"></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">返 回</el-button>
-        <el-button type="primary" @click="dialogTableVisible = false">导 出</el-button>
+        <el-button type="primary" @click="exportExcel">导 出</el-button>
       </span>
     </div>
-<!--    <el-dialog title="课程考勤信息" :visible.sync="dialogTableVisible">-->
-<!--      <el-table :data="classRecordList" height="300">-->
-<!--        <el-table-column property="id" label="记录编号" width="150"></el-table-column>-->
-<!--        <el-table-column property="studentId" label="学生编号" width="200"></el-table-column>-->
-<!--        <el-table-column property="courseId" label="课程编号"></el-table-column>-->
-<!--        <el-table-column property="time" label="打卡时间"></el-table-column>-->
-<!--      </el-table>-->
-<!--      <span slot="footer" class="dialog-footer">-->
-<!--        <el-button @click="dialogTableVisible = false">取 消</el-button>-->
-<!--        <el-button type="primary" @click="dialogTableVisible = false">导 出</el-button>-->
-<!--      </span>-->
-<!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import { getClassList, getClassRecordList } from '@/api/record'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 
 export default {
-  // filters: {
-  //   statusFilter(status) {
-  //     const statusMap = {
-  //       published: 'success',
-  //       draft: 'gray',
-  //       deleted: 'danger'
-  //     }
-  //     return statusMap[status]
-  //   }
-  // },
   data() {
     return {
       curPage: 0,
@@ -203,17 +170,51 @@ export default {
       var params = {
         courseId: Id,
         pageNumber: 1,
-        pageSize: 1000
+        pageSize: 1
       }
       // alert(params.courseId)
       getClassRecordList(params).then(response => {
-        params.pageSize = response.data.totalItems
+        if (response.data.totalItems !== 0) {
+          params.pageSize = response.data.totalItems
+        } else {
+          params.pageSize = 1
+        }
+        // console.log(params)
         getClassRecordList(params).then(response => {
           _this.classRecordList = response.data.items
           _this.dialogTableVisible = true
           // alert(params.pageSize)
         })
       })
+    },
+    exportExcel() {
+      if (this.classRecordList.length === 0) {
+        this.$message.warning('该课程暂无考勤数据')
+      } else {
+        /* 从表生成工作簿对象 */
+        var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+          bookType: 'xlsx',
+          bookSST: true,
+          type: 'array'
+        })
+        try {
+          FileSaver.saveAs(
+            // Blob 对象表示一个不可变、原始数据的类文件对象。
+            // Blob 表示的不一定是JavaScript原生格式的数据。
+            // File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            // 返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: 'application/octet-stream' }),
+            // 设置导出文件名称
+            '课程' + this.classRecordList[0].courseId + '考勤记录.xlsx'
+          )
+        } catch (e) {
+          this.$message.error('导出失败')
+          // if (typeof console !== 'undefined') console.log(e, wbout)
+        }
+        return wbout
+      }
     }
   }
 }
