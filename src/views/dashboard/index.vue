@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">welcome: {{ name }}</div>
+<!--    <div class="dashboard-text">welcome: {{ name }}</div>-->
+    <div class="dashboard-text">欢迎您使用基于人脸识别的考勤系统管理后台</div>
   </div>
 </template>
 

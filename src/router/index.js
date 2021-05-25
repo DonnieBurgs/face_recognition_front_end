@@ -53,8 +53,62 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
+  }
 
+  // {
+  //   path: '/record',
+  //   component: Layout,
+  //   redirect: '/record/classRecord',
+  //   name: 'Record',
+  //   meta: { title: '考勤管理', icon: 'el-icon-s-help' },
+  //   children: [
+  //     {
+  //       path: 'classRecord',
+  //       name: 'classRecord',
+  //       component: () => import('@/views/record/classRecord/index'),
+  //       meta: { title: '课程考勤管理', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'studentRecord',
+  //       name: 'studentRecord',
+  //       component: () => import('@/views/record/studentRecord/index'),
+  //       meta: { title: '学生考勤管理', icon: 'tree' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/student',
+  //   component: Layout,
+  //   redirect: '/studentManage',
+  //   name: 'Student',
+  //   children: [
+  //     {
+  //       path: '/studentManage',
+  //       name: 'studentManage',
+  //       component: () => import('@/views/student/index'),
+  //       meta: { title: '学生管理', icon: 'form' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/teacher',
+  //   component: Layout,
+  //   redirect: '/teacherManage',
+  //   name: 'Teacher',
+  //   children: [
+  //     {
+  //       path: '/teacherManage',
+  //       name: 'teacherManage',
+  //       component: () => import('@/views/teacher/index'),
+  //       meta: { title: '教师管理', icon: 'el-icon-user-solid' }
+  //     }
+  //   ]
+  // },
+  // // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
+export const asyncRoutes1 = [
   {
     path: '/record',
     component: Layout,
@@ -104,114 +158,53 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'el-icon-s-help' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'Tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       name: 'Menu2',
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+export const asyncRoutes2 = [
+  {
+    path: '/queryRecord',
+    component: Layout,
+    redirect: '/recordManage',
+    children: [{
+      path: 'recordManage',
+      name: 'recordManage',
+      component: () => import('@/views/recordManage/index'),
+      meta: { title: '考勤记录', icon: 'table' }
+    }]
+  }
+  // {
+  //   path: '/record',
+  //   component: Layout,
+  //   redirect: '/record/classRecord',
+  //   name: 'Record',
+  //   meta: { title: '考勤管理', icon: 'el-icon-s-help' },
+  //   children: [
+  //     {
+  //       path: 'classRecord',
+  //       name: 'classRecord',
+  //       component: () => import('@/views/record/classRecord/index'),
+  //       meta: { title: '课程考勤管理', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'studentRecord',
+  //       name: 'studentRecord',
+  //       component: () => import('@/views/record/studentRecord/index'),
+  //       meta: { title: '学生考勤管理', icon: 'tree' }
+  //     }
+  //   ]
+  // }
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
+// var name = store.getters.name
+// var asyncRoutes = null
+// if (name === 'admin') {
+//   asyncRoutes = asyncRoutes1
+// } else {
+//   asyncRoutes = asyncRoutes2
+// }
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
